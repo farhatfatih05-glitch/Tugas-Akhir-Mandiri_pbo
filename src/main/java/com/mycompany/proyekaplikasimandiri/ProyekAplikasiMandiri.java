@@ -47,8 +47,17 @@ public class ProyekAplikasiMandiri {
         int repetisi = input.nextInt();
 
         User user1 = new User(nama, umur, beratBadan);
-        Workout workout1 = new Workout(namaWorkout, durasi, level);
+
+        Workout workout1 = new Workout(
+                namaWorkout,
+                durasi,
+                level
+        );
+
         Exercise exercise1 = new Exercise(
+                namaWorkout,
+                durasi,
+                level,
                 namaGerakan,
                 targetOtot,
                 set,
@@ -100,6 +109,7 @@ public class ProyekAplikasiMandiri {
         input.close();
     }
 }
+
 
 class User {
 
@@ -153,11 +163,12 @@ class User {
     }
 }
 
+
 class Workout {
 
-    private String namaWorkout;
-    private int durasi;
-    private String level;
+    protected String namaWorkout;
+    protected int durasi;
+    protected String level;
 
     public Workout(String namaWorkout, int durasi, String level) {
         this.namaWorkout = namaWorkout;
@@ -201,14 +212,25 @@ class Workout {
     }
 }
 
-class Exercise {
+
+class Exercise extends Workout {
 
     private String namaGerakan;
     private String targetOtot;
     private int set;
     private int repetisi;
 
-    public Exercise(String namaGerakan, String targetOtot, int set, int repetisi) {
+    public Exercise(
+            String namaWorkout,
+            int durasi,
+            String level,
+            String namaGerakan,
+            String targetOtot,
+            int set,
+            int repetisi) {
+
+        super(namaWorkout, durasi, level);
+
         this.namaGerakan = namaGerakan;
         this.targetOtot = targetOtot;
         this.set = set;
@@ -257,9 +279,14 @@ class Exercise {
 
     public void tampilkanExercise() {
         System.out.println("Data Exercise");
-        System.out.println("Gerakan     : " + getNamaGerakan());
-        System.out.println("Target Otot : " + getTargetOtot());
-        System.out.println("Set         : " + getSet());
-        System.out.println("Repetisi    : " + getRepetisi());
+
+        System.out.println("Nama Workout : " + getNamaWorkout());
+        System.out.println("Durasi       : " + getDurasi() + " menit");
+        System.out.println("Level        : " + getLevel());
+
+        System.out.println("Gerakan      : " + getNamaGerakan());
+        System.out.println("Target Otot  : " + getTargetOtot());
+        System.out.println("Set          : " + getSet());
+        System.out.println("Repetisi     : " + getRepetisi());
     }
 }
