@@ -8,98 +8,219 @@ public class ProyekAplikasiMandiri {
 
         Scanner input = new Scanner(System.in);
 
-        System.out.println("          GYMFLOW");
+        System.out.println("========== GYMFLOW ==========");
         System.out.println("     WORKOUT APPLICATION");
 
         System.out.println("\nData Pengguna");
-        System.out.print("Nama         : ");
+
+        System.out.print("Nama        : ");
         String nama = input.nextLine();
 
-        System.out.print("Umur         : ");
+        System.out.print("Umur        : ");
         int umur = input.nextInt();
 
-        System.out.print("Berat Badan  : ");
-        double beratBadan = input.nextDouble();
+        System.out.print("Berat Badan : ");
+        double berat = input.nextDouble();
         input.nextLine();
 
-        System.out.println("\nData Workout");
-        System.out.print("Nama Workout : ");
-        String namaWorkout = input.nextLine();
+        User user = new User(nama, umur, berat);
 
-        System.out.print("Durasi       : ");
+        System.out.println("\nPilih Workout");
+        System.out.println("1. Chest Day");
+        System.out.println("2. Back Day");
+        System.out.println("3. Leg Day");
+        System.out.println("4. Arm Day");
+
+        System.out.print("Pilihan : ");
+        int pilihan = input.nextInt();
+        input.nextLine();
+
+        System.out.print("Durasi : ");
         int durasi = input.nextInt();
         input.nextLine();
 
-        System.out.print("Level        : ");
+        System.out.print("Level : ");
         String level = input.nextLine();
 
+        Workout workout;
+
+        if (pilihan == 1)
+            workout = new ChestWorkout("Chest Day", durasi, level);
+        else if (pilihan == 2)
+            workout = new BackWorkout("Back Day", durasi, level);
+        else if (pilihan == 3)
+            workout = new LegWorkout("Leg Day", durasi, level);
+        else
+            workout = new ArmWorkout("Arm Day", durasi, level);
+
         System.out.println("\nData Exercise");
+
         System.out.print("Nama Gerakan : ");
-        String namaGerakan = input.nextLine();
+        String gerakan = input.nextLine();
 
-        System.out.print("Target Otot  : ");
-        String targetOtot = input.nextLine();
+        System.out.print("Target Otot : ");
+        String otot = input.nextLine();
 
-        System.out.print("Jumlah Set   : ");
+        System.out.print("Berat Beban : ");
+        double beban = input.nextDouble();
+
+        System.out.print("Set : ");
         int set = input.nextInt();
 
-        System.out.print("Repetisi     : ");
+        System.out.print("Repetisi : ");
         int repetisi = input.nextInt();
 
-        User user1 = new User(nama, umur, beratBadan);
-        Workout workout1 = new Workout(namaWorkout, durasi, level);
-        Exercise exercise1 = new Exercise(
-                namaGerakan,
-                targetOtot,
-                set,
-                repetisi
+        Exercise exercise = new Exercise(
+                gerakan, otot, beban, set, repetisi
         );
 
-        System.out.println("\n          HASIL DATA");
+        System.out.println("\n========== HASIL DATA ==========");
 
-        user1.tampilkanData();
-
-        System.out.println();
-
-        workout1.tampilkanWorkout();
+        user.tampilkanData();
 
         System.out.println();
+        workout.tampilkanWorkout();
 
-        exercise1.tampilkanExercise();
+        System.out.println();
+        exercise.tampilkanExercise();
 
-        System.out.println("\n======================================");
-        System.out.println("       SIMULASI GETTER & SETTER");
-        System.out.println("======================================");
+        System.out.println("\nKalori : "
+                + workout.hitungKalori() + " kcal");
 
-        System.out.println("\nData menggunakan Getter:");
-        System.out.println("Nama Pengguna : " + user1.getNama());
-        System.out.println("Umur          : " + user1.getUmur());
-        System.out.println("Berat Badan   : " + user1.getBeratBadan());
+        workout.mulaiWorkout();
+        workout.selesaiWorkout();
 
-        System.out.println("\n--- Perubahan Data Valid ---");
+        System.out.println("\n========== OVERLOADING ==========");
 
-        user1.setNama("Muhammad Fathi");
-        user1.setUmur(20);
-        user1.setBeratBadan(65.5);
+        exercise.tambahExercise("Bench Press");
+        exercise.tambahExercise("Bench Press", 4);
+        exercise.tambahExercise("Bench Press", 4, 10);
 
-        System.out.println("Data berhasil diubah.");
-        System.out.println("Nama Baru        : " + user1.getNama());
-        System.out.println("Umur Baru        : " + user1.getUmur());
-        System.out.println("Berat Badan Baru : " + user1.getBeratBadan());
+        System.out.println("\n========== GETTER & SETTER ==========");
 
-        System.out.println("\n--- Perubahan Data Tidak Valid ---");
+        System.out.println("Nama : " + user.getNama());
+        System.out.println("Umur : " + user.getUmur());
+        System.out.println("Berat : " + user.getBeratBadan());
 
-        user1.setUmur(-5);
-        user1.setBeratBadan(-10);
+        user.setNama("Muhammad Fathi");
+        user.setUmur(20);
+        user.setBeratBadan(65.5);
 
-        System.out.println("\nData setelah percobaan data tidak valid:");
-        System.out.println("Nama        : " + user1.getNama());
-        System.out.println("Umur        : " + user1.getUmur());
-        System.out.println("Berat Badan : " + user1.getBeratBadan());
+        user.setUmur(-5);
+        user.setBeratBadan(-10);
+
+        System.out.println("\nData Akhir");
+        user.tampilkanData();
 
         input.close();
     }
 }
+
+
+interface Trackable {
+
+    void mulaiWorkout();
+
+    void selesaiWorkout();
+}
+
+
+abstract class Workout implements Trackable {
+
+    private String namaWorkout;
+    private int durasi;
+    private String level;
+
+    public Workout(String namaWorkout, int durasi, String level) {
+        this.namaWorkout = namaWorkout;
+        this.durasi = durasi;
+        this.level = level;
+    }
+
+    public String getNamaWorkout() {
+        return namaWorkout;
+    }
+
+    public int getDurasi() {
+        return durasi;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public abstract double hitungKalori();
+
+    public void tampilkanWorkout() {
+
+        System.out.println("Workout : " + namaWorkout);
+        System.out.println("Durasi  : " + durasi + " menit");
+        System.out.println("Level   : " + level);
+    }
+
+    @Override
+    public void mulaiWorkout() {
+        System.out.println("Workout dimulai!");
+    }
+
+    @Override
+    public void selesaiWorkout() {
+        System.out.println("Workout selesai!");
+    }
+}
+
+
+class ChestWorkout extends Workout {
+
+    public ChestWorkout(String nama, int durasi, String level) {
+        super(nama, durasi, level);
+    }
+
+    @Override
+    public double hitungKalori() {
+        return getDurasi() * 7.5;
+    }
+}
+
+
+class BackWorkout extends Workout {
+
+    public BackWorkout(String nama, int durasi, String level) {
+        super(nama, durasi, level);
+    }
+
+    @Override
+    public double hitungKalori() {
+        return getDurasi() * 8;
+    }
+}
+
+
+class LegWorkout extends Workout {
+
+    public LegWorkout(String nama, int durasi, String level) {
+        super(nama, durasi, level);
+    }
+
+    @Override
+    public double hitungKalori() {
+        return getDurasi() * 9;
+    }
+}
+
+
+class ArmWorkout extends Workout {
+
+    public ArmWorkout(String nama, int durasi, String level) {
+        super(nama, durasi, level);
+    }
+
+    @Override
+    public double hitungKalori() {
+        return getDurasi() * 6.5;
+    }
+}
+
 
 class User {
 
@@ -117,149 +238,91 @@ class User {
         return nama;
     }
 
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
-
     public int getUmur() {
         return umur;
-    }
-
-    public void setUmur(int umur) {
-        if (umur > 0) {
-            this.umur = umur;
-        } else {
-            System.out.println("Umur tidak valid! Umur harus lebih dari 0.");
-        }
     }
 
     public double getBeratBadan() {
         return beratBadan;
     }
 
-    public void setBeratBadan(double beratBadan) {
-        if (beratBadan > 0) {
-            this.beratBadan = beratBadan;
-        } else {
-            System.out.println("Berat badan tidak valid! Berat badan harus lebih dari 0.");
-        }
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public void setUmur(int umur) {
+
+        if (umur > 0)
+            this.umur = umur;
+        else
+            System.out.println("Umur tidak valid!");
+    }
+
+    public void setBeratBadan(double berat) {
+
+        if (berat > 0)
+            this.beratBadan = berat;
+        else
+            System.out.println("Berat badan tidak valid!");
     }
 
     public void tampilkanData() {
-        System.out.println("Data Pengguna");
-        System.out.println("Nama        : " + getNama());
-        System.out.println("Umur        : " + getUmur() + " tahun");
-        System.out.println("Berat Badan : " + getBeratBadan() + " kg");
+
+        System.out.println("\nData Pengguna");
+        System.out.println("Nama   : " + nama);
+        System.out.println("Umur   : " + umur + " tahun");
+        System.out.println("Berat  : " + beratBadan + " kg");
     }
 }
 
-class Workout {
-
-    private String namaWorkout;
-    private int durasi;
-    private String level;
-
-    public Workout(String namaWorkout, int durasi, String level) {
-        this.namaWorkout = namaWorkout;
-        this.durasi = durasi;
-        this.level = level;
-    }
-
-    public String getNamaWorkout() {
-        return namaWorkout;
-    }
-
-    public void setNamaWorkout(String namaWorkout) {
-        this.namaWorkout = namaWorkout;
-    }
-
-    public int getDurasi() {
-        return durasi;
-    }
-
-    public void setDurasi(int durasi) {
-        if (durasi > 0) {
-            this.durasi = durasi;
-        } else {
-            System.out.println("Durasi tidak valid! Durasi harus lebih dari 0.");
-        }
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public void tampilkanWorkout() {
-        System.out.println("Data Workout");
-        System.out.println("Nama        : " + getNamaWorkout());
-        System.out.println("Durasi      : " + getDurasi() + " menit");
-        System.out.println("Level       : " + getLevel());
-    }
-}
 
 class Exercise {
 
     private String namaGerakan;
     private String targetOtot;
+    private double beratBeban;
     private int set;
     private int repetisi;
 
-    public Exercise(String namaGerakan, String targetOtot, int set, int repetisi) {
+    public Exercise(
+            String namaGerakan,
+            String targetOtot,
+            double beratBeban,
+            int set,
+            int repetisi) {
+
         this.namaGerakan = namaGerakan;
         this.targetOtot = targetOtot;
+        this.beratBeban = beratBeban;
         this.set = set;
         this.repetisi = repetisi;
     }
 
-    public String getNamaGerakan() {
-        return namaGerakan;
+    public void tambahExercise(String nama) {
+        System.out.println("Exercise : " + nama);
     }
 
-    public void setNamaGerakan(String namaGerakan) {
-        this.namaGerakan = namaGerakan;
+    public void tambahExercise(String nama, int set) {
+        System.out.println("Exercise : " + nama + ", Set : " + set);
     }
 
-    public String getTargetOtot() {
-        return targetOtot;
-    }
+    public void tambahExercise(
+            String nama, int set, int repetisi) {
 
-    public void setTargetOtot(String targetOtot) {
-        this.targetOtot = targetOtot;
-    }
-
-    public int getSet() {
-        return set;
-    }
-
-    public void setSet(int set) {
-        if (set > 0) {
-            this.set = set;
-        } else {
-            System.out.println("Jumlah set tidak valid!");
-        }
-    }
-
-    public int getRepetisi() {
-        return repetisi;
-    }
-
-    public void setRepetisi(int repetisi) {
-        if (repetisi > 0) {
-            this.repetisi = repetisi;
-        } else {
-            System.out.println("Jumlah repetisi tidak valid!");
-        }
+        System.out.println(
+                "Exercise : " + nama +
+                ", Set : " + set +
+                ", Repetisi : " + repetisi
+        );
     }
 
     public void tampilkanExercise() {
+
         System.out.println("Data Exercise");
-        System.out.println("Gerakan     : " + getNamaGerakan());
-        System.out.println("Target Otot : " + getTargetOtot());
-        System.out.println("Set         : " + getSet());
-        System.out.println("Repetisi    : " + getRepetisi());
+        System.out.println("Gerakan : " + namaGerakan);
+        System.out.println("Otot    : " + targetOtot);
+        System.out.println("Beban   : " + beratBeban + " kg");
+        System.out.println("Set     : " + set);
+        System.out.println("Repetisi: " + repetisi);
     }
 }
